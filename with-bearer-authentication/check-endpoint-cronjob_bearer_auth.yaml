@@ -1,23 +1,23 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: check-endpoint-cronjob-1
+  name: check-endpoint-cronjob-bearer-auth
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/5 * * * *"  # A cada 5 minutos
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: check-endpoint
-            image: leonardozwirtes/verify-url:latest
+            image: <your-docker-image-bearer-auth>:latest
             command: ["/bin/sh"]
             args:
               - "-c"
               - "/usr/local/bin/check_endpoint.sh $ENDPOINT_URL $BEARER_TOKEN"
             env:
             - name: ENDPOINT_URL
-              value: "https://apm-server.dispara.ai"
+              value: "https://example.com"  # Substitua pela sua URL de endpoint
             - name: BEARER_TOKEN
-              value: "C98v8AF9i9qO0cec20Y2o6Ba"
+              value: "seu-token-bearer"     # Substitua pelo seu token de autenticação Bearer
           restartPolicy: OnFailure
