@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: check-endpoint-cronjob
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
+  jobTemplate:
+    spec:
+      backoffLimit: 0  # Define o número máximo de retentativas para 0
+      template:
+        spec:
+          containers:
+          - name: check-endpoint
+            image: leonardozwirtes/verify-url-alert-teams
+            command: ["/bin/sh"]
+            args:
+              - "-c"
+              - "/usr/local/bin/check_endpoint.sh $ENDPOINT_URL $BEARER_TOKEN $TEAMS_WEBHOOK_URL"
+            env:
+            - name: ENDPOINT_URL
+              value: "https://example.com"  # Substitua pela sua URL de endpoint
+            - name: BEARER_TOKEN
+              value: "seu-token-bearer"     # Substitua pelo seu token de autenticação Bearer
+            - name: TEAMS_WEBHOOK_URL
+              value: "url-webhook-teams"    # Substitua pelo Webhook do Teams
+          restartPolicy: Never
