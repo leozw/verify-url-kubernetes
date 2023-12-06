@@ -17,14 +17,6 @@ send_teams_message() {
 # Verifica se o endpoint está acessível
 if curl --output /dev/null --silent --head --fail --max-time $TIMEOUT -H "Authorization: Bearer $BEARER_TOKEN" $ENDPOINT_URL; then
     echo "Endpoint está OK: $ENDPOINT_URL"
-    
-    # Verifica se o status já foi enviado
-    if [ "$STATUS_SENT" = false ]; then
-      send_teams_message "Endpoint está OK: $ENDPOINT_URL"
-      STATUS_SENT=true
-    fi
-    
-    exit 0
 else
     ERROR_MESSAGE="Erro ao acessar o endpoint: $ENDPOINT_URL"
     echo $ERROR_MESSAGE
