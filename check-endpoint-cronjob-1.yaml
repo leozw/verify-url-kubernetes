@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: check-endpoint-cronjob-1
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: check-endpoint
+            image: leonardozwirtes/verify-url:latest
+            command: ["/bin/sh"]
+            args:
+              - "-c"
+              - "/usr/local/bin/check_endpoint.sh $ENDPOINT_URL $BEARER_TOKEN"
+            env:
+            - name: ENDPOINT_URL
+              value: "https://apm-server.dispara.ai"
+            - name: BEARER_TOKEN
+              value: "C98v8AF9i9qO0cec20Y2o6Ba"
+          restartPolicy: OnFailure
